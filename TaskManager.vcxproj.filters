@@ -21,9 +21,15 @@
     <ClCompile Include="taskMenu.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="Task.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="taskMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Task.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
