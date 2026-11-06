@@ -16,5 +16,6 @@ public:
 	const std::string& getTitle() const;
 	const std::string& getDescription() const;
 	bool isCompleted() const;
+	void markCompleted();
 };
 #endif

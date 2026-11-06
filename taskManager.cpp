@@ -1,4 +1,4 @@
-#include "TaskManager.h"
+#include "taskManager.h"
 #include <iostream>
 
 std::size_t TaskManager::getTaskCount() const
@@ -23,9 +23,10 @@ void TaskManager::viewTasks() const
 	{
 		for (const auto& task : m_tasks) //Loop through the vector to retreive each task
 		{
-			std::cout << task.getId() << '\n';
-			std::cout << task.getTitle() << '\n';
-			std::cout << task.getDescription() << '\n';
+			std::cout << "==============LIST==============" << '\n';
+			std::cout << "ID: " << task.getId() << '\n';
+			std::cout << "Title: " << task.getTitle() << '\n';
+			std::cout << "Description: " << task.getDescription() << '\n';
 			if (task.isCompleted())
 			{
 				std::cout << "Status: Completed" << '\n';
@@ -34,6 +35,24 @@ void TaskManager::viewTasks() const
 			{
 				std::cout << "Status: Incomplete" << '\n';
 			}
+			std::cout << "==============LIST==============" << '\n';
 		}
 	}
+}
+
+bool TaskManager::markTaskCompleted(int t_id)
+{
+	bool found{ false };
+	for (auto& task : m_tasks)
+	{
+		if (t_id == task.getId()) //Check to see if the ID that was given is a match
+		{
+			if (!task.isCompleted()) //Check if the task is not completed
+			{
+				task.markCompleted();
+			}
+			return true;
+		}
+	}
+	return false;
 }

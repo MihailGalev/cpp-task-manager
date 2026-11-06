@@ -27,3 +27,8 @@ bool Task::isCompleted() const
 {
 	return m_completed;
 }
+
+void Task::markCompleted()
+{
+	m_completed = true;
+}
