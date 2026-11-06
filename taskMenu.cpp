@@ -3,7 +3,8 @@
 #include <string>
 #include "taskMenu.h"
 #include "taskMenuVisualization.h"
-bool checkInvalidInput(int option);
+bool checkInvalidInput();
+bool isValidMenuOption(int t_option);
 
 void taskMenu(TaskManager& manager)
 {
@@ -13,7 +14,7 @@ void taskMenu(TaskManager& manager)
 
 		int option{};
 		std::cin >> option;
-		if (checkInvalidInput(option)) // This line checks the validity of the user input. If the input is invalid, an error message is displayed and the user is prompted to try again.
+		if (checkInvalidInput() || !isValidMenuOption(option)) // This line checks the validity of the user input. If the input is invalid, an error message is displayed and the user is prompted to try again.
 		{
 			std::cout << "The option you've chosen is not valid. Please try again!" << '\n';
 			continue;
@@ -25,6 +26,11 @@ void taskMenu(TaskManager& manager)
 			int id{};
 			std::cout << "Enter an ID: ";
 			std::cin >> id;
+			if (checkInvalidInput() || id <= 0)
+			{
+				std::cout << "Invalid ID. ID can be only positive integers." << '\n';
+				break;
+			}
 
 			std::string title;
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -35,7 +41,14 @@ void taskMenu(TaskManager& manager)
 			std::cout << "Enter a brief description of the Task: ";
 			std::getline(std::cin, description);
 
-			manager.addTask(id, title, description);
+			if (manager.addTask(id, title, description))
+			{
+				std::cout << "Task added successfully!" << '\n';
+			}
+			else
+			{
+				std::cout << "A task with this ID already exists!" << '\n';
+			}
 			break;
 		}
 		case 2: // View a list of all tasks
@@ -46,8 +59,21 @@ void taskMenu(TaskManager& manager)
 			int id{};
 			std::cout << "Enter the ID of the task you want to be deleted: ";
 			std::cin >> id;
+			if (checkInvalidInput() || id <= 0)
+			{
+				std::cout << "Invalid ID. ID can be only positive integers." << '\n';
+				break;
+			}
 
-			manager.deleteTask(id);
+			bool done{ manager.deleteTask(id) };
+			if (done)
+			{
+				std::cout << "The task has been deleted successfully!" << '\n';
+			}
+			else 
+			{
+				std::cout << "Task not found!" << '\n';
+			}
 			break;
 		}
 		case 4: //Mark a task as complete
@@ -55,12 +81,25 @@ void taskMenu(TaskManager& manager)
 			int id{};
 			std::cout << "Enter the ID of the task you want to be marked as complete: ";
 			std::cin >> id;
+			if (checkInvalidInput() || id <= 0)
+			{
+				std::cout << "Invalid ID. ID can be only positive integers." << '\n';
+				break;
+			}
 
-			manager.markTaskCompleted(id);
+			bool marked{ manager.markTaskCompleted(id) };
+			if (marked)
+			{
+				std::cout << "The task has been marked as complete successfully!" << '\n';
+			}
+			else
+			{
+				std::cout << "Task not found!" << '\n';
+			}
 			break;
 		}
 		case 5: //View remaining task count
-			std::cout << "Your remaining task count is: " << manager.getTaskCount() << '\n';
+			std::cout << "Total task count for now: " << manager.getTaskCount() << '\n';
 			break;
 		case 6:
 			std::cout << "You've chosen to exit the program. Goodbye!" << '\n';
@@ -69,7 +108,7 @@ void taskMenu(TaskManager& manager)
 	}
 }
 
-bool checkInvalidInput(int t_option)
+bool checkInvalidInput()
 {
 	if (std::cin.fail() || std::cin.peek() != '\n')// Checks if the input is invalid or there are extra characters in the input stream. If either condition is true, the input is considered invalid.
 	{
@@ -77,12 +116,13 @@ bool checkInvalidInput(int t_option)
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
 		return true; // Invalid input
 	}
-	else if (t_option < 1 || t_option > 6)
-	{
-		return true; // Invalid input
-	}
 	else
 	{
 		return false; // Valid input
 	}
+}
+
+bool isValidMenuOption(int t_option)
+{
+	return t_option >= 1 && t_option <= 6;
 }

@@ -6,11 +6,19 @@ std::size_t TaskManager::getTaskCount() const
 	return m_tasks.size();
 }
 
-void TaskManager::addTask(int id, const std::string& title,
+bool TaskManager::addTask(int id, const std::string& title,
 	const std::string& description)
 {
+	for (const auto& task : m_tasks)
+	{
+		if (id == task.getId())
+		{
+			return false;
+		}
+	}
 	Task newTask(id, title, description);
 	m_tasks.push_back(newTask);
+	return true;
 }
 
 void TaskManager::viewTasks() const
