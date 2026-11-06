@@ -13,12 +13,12 @@ int Task::getId() const
 	return m_id;
 }
 
-std::string Task::getTitle() const
+const std::string& Task::getTitle() const
 {
 	return m_title;
 }
 
-std::string Task::getDescription() const
+const std::string& Task::getDescription() const
 {
 	return m_description;
 }
