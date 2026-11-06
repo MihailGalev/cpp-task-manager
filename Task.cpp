@@ -8,3 +8,22 @@ Task::Task(int id, const std::string& title, const std::string& description) //T
 	{
 	}
 
+int Task::getId() const
+{
+	return m_id;
+}
+
+std::string Task::getTitle() const
+{
+	return m_title;
+}
+
+std::string Task::getDescription() const
+{
+	return m_description;
+}
+
+bool Task::getCompleted() const
+{
+	return m_completed;
+}

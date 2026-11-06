@@ -11,5 +11,10 @@ private:
 
 public:
 	Task(int id, const std::string& title, const std::string& description); //This is the constructor for the Task class. 
+	//From here starts the getter functions for the member variables of the Task class. These functions allow access to the private member variables from outside the class.
+	int getId() const { return m_id; }
+	std::string getTitle() const { return m_title; }
+	std::string getDescription() const { return m_description; }
+	bool getCompleted() const { return m_completed; }
 };
 #endif
