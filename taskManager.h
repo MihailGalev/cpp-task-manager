@@ -14,6 +14,7 @@ public:
 		const std::string& description);
 	void viewTasks() const;
 	bool markTaskCompleted(int id);
+	bool deleteTask(int id);
 };
 #endif // !TASK_MANAGER_H
 

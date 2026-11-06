@@ -8,6 +8,10 @@ int main()
 	TaskManager manager;
 	manager.addTask(1, "Hello", "I'm saying Hello!");
 	manager.addTask(2, "Hello1", "I'm saying Hello1!");
+	manager.markTaskCompleted(2);
+	manager.addTask(3, "Hello12", "I'm saying Hello12!");
+	manager.viewTasks();
+	manager.deleteTask(1);
 	manager.viewTasks();
 	return 0;
 }

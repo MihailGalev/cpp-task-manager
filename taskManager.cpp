@@ -29,7 +29,7 @@ void TaskManager::viewTasks() const
 			std::cout << "Description: " << task.getDescription() << '\n';
 			if (task.isCompleted())
 			{
-				std::cout << "Status: Completed" << '\n';
+				std::cout << "Status: Complete" << '\n';
 			}
 			else
 			{
@@ -42,7 +42,6 @@ void TaskManager::viewTasks() const
 
 bool TaskManager::markTaskCompleted(int t_id)
 {
-	bool found{ false };
 	for (auto& task : m_tasks)
 	{
 		if (t_id == task.getId()) //Check to see if the ID that was given is a match
@@ -51,6 +50,20 @@ bool TaskManager::markTaskCompleted(int t_id)
 			{
 				task.markCompleted();
 			}
+			return true;
+		}
+	}
+	return false;
+}
+
+bool TaskManager::deleteTask(int t_id)
+{
+	auto it = m_tasks.begin(); //Points to the first task
+	while(it != m_tasks.end())
+	{
+		if (it->getId() == t_id) //we assign the value of getID() to the "it" iterator and compare it.
+		{
+			m_tasks.erase(it);
 			return true;
 		}
 	}
