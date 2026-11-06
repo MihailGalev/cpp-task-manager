@@ -4,14 +4,7 @@
 
 int main()
 {
-	//taskMenu();
 	TaskManager manager;
-	manager.addTask(1, "Hello", "I'm saying Hello!");
-	manager.addTask(2, "Hello1", "I'm saying Hello1!");
-	manager.markTaskCompleted(2);
-	manager.addTask(3, "Hello12", "I'm saying Hello12!");
-	manager.viewTasks();
-	manager.deleteTask(3);
-	manager.viewTasks();
+	taskMenu(manager);
 	return 0;
 }
