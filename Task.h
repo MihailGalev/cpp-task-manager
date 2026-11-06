@@ -10,6 +10,6 @@ private:
 	bool m_completed;
 
 public:
-	Task(int id, const std::string& title, const std::string& description, bool completed); //This is the constructor for the Task class. 
+	Task(int id, const std::string& title, const std::string& description); //This is the constructor for the Task class. 
 };
 #endif
