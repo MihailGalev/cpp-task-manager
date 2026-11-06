@@ -61,11 +61,12 @@ bool TaskManager::deleteTask(int t_id)
 	auto it = m_tasks.begin(); //Points to the first task
 	while(it != m_tasks.end())
 	{
-		if (it->getId() == t_id) //we assign the value of getID() to the "it" iterator and compare it.
+		if (it->getId() == t_id) //Access the ID of the object the iterator "it" is pointing to and compare it.
 		{
 			m_tasks.erase(it);
 			return true;
 		}
+		it++;
 	}
 	return false;
 }

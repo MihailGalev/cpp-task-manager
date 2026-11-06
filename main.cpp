@@ -11,7 +11,7 @@ int main()
 	manager.markTaskCompleted(2);
 	manager.addTask(3, "Hello12", "I'm saying Hello12!");
 	manager.viewTasks();
-	manager.deleteTask(1);
+	manager.deleteTask(3);
 	manager.viewTasks();
 	return 0;
 }
