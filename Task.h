@@ -15,6 +15,6 @@ public:
 	int getId() const;
 	const std::string& getTitle() const;
 	const std::string& getDescription() const;
-	bool getCompleted() const;
+	bool isCompleted() const;
 };
 #endif
