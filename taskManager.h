@@ -10,6 +10,8 @@ private:
 	std::vector<Task> m_tasks;
 public:
 	std::size_t getTaskCount() const;
+	std::size_t getCompletedTaskCount() const;
+	std::size_t getIncompleteTaskCount() const;
 	bool addTask(int id, const std::string& title,
 		const std::string& description);
 	void viewTasks() const;

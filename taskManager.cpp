@@ -1,20 +1,50 @@
 #include "taskManager.h"
 #include <iostream>
+#include <algorithm>
 
 std::size_t TaskManager::getTaskCount() const
 {
 	return m_tasks.size();
 }
 
+std::size_t TaskManager::getCompletedTaskCount() const
+{
+	return std::count_if(
+		m_tasks.begin(),
+		m_tasks.end(),
+		[](const Task& task) 
+		{
+		return task.isCompleted();
+		}
+	);
+}
+
+std::size_t TaskManager::getIncompleteTaskCount() const
+{
+	return std::count_if(
+		m_tasks.begin(), 
+		m_tasks.end(), 
+		[](const Task& task) {
+		return !task.isCompleted();
+	}
+	);
+}
+
 bool TaskManager::addTask(int id, const std::string& title,
 	const std::string& description)
 {
-	for (const auto& task : m_tasks)
-	{
-		if (id == task.getId())
+
+	auto it = std::find_if(
+		m_tasks.begin(), 
+		m_tasks.end(),
+		[id](const Task& task)
 		{
-			return false;
+		return task.getId() == id;
 		}
+	);
+	if (it != m_tasks.end())
+	{
+		return false;
 	}
 	Task newTask(id, title, description);
 	m_tasks.push_back(newTask);

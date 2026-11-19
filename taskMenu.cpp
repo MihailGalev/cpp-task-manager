@@ -99,7 +99,9 @@ void taskMenu(TaskManager& manager)
 			break;
 		}
 		case 5: //View remaining task count
-			std::cout << "Total task count for now: " << manager.getTaskCount() << '\n';
+			std::cout << "Total count of entered tasks: " << manager.getTaskCount() << '\n';
+			std::cout << "Total count of copmpleted tasks: " << manager.getCompletedTaskCount() << '\n';
+			std::cout << "Total count of incompleted tasks: " << manager.getIncompleteTaskCount() << '\n';
 			break;
 		case 6:
 			std::cout << "You've chosen to exit the program. Goodbye!" << '\n';
