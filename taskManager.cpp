@@ -107,3 +107,15 @@ std::vector<Task>::iterator TaskManager::findTaskById(int t_id)
 	}
 	);
 }
+
+bool TaskManager::changeTaskTitle(int t_id, const std::string& t_title)
+{
+	auto it = findTaskById(t_id);
+	if (it != m_tasks.end())
+	{
+		it->setTitle(t_title);
+		return true;
+	}
+
+	return false;
+}
