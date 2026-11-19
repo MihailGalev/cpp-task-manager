@@ -8,6 +8,7 @@ class TaskManager
 {
 private:
 	std::vector<Task> m_tasks;
+	std::vector<Task>::iterator findTaskById(int id);
 public:
 	std::size_t getTaskCount() const;
 	std::size_t getCompletedTaskCount() const;

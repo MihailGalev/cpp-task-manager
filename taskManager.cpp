@@ -33,15 +33,7 @@ std::size_t TaskManager::getIncompleteTaskCount() const
 bool TaskManager::addTask(int id, const std::string& title,
 	const std::string& description)
 {
-
-	auto it = std::find_if(
-		m_tasks.begin(), 
-		m_tasks.end(),
-		[id](const Task& task)
-		{
-		return task.getId() == id;
-		}
-	);
+	auto it = findTaskById(id);
 	if (it != m_tasks.end())
 	{
 		return false;
@@ -80,31 +72,38 @@ void TaskManager::viewTasks() const
 
 bool TaskManager::markTaskCompleted(int t_id)
 {
-	for (auto& task : m_tasks)
+	auto it = findTaskById(t_id);
+	if (it != m_tasks.end())
 	{
-		if (t_id == task.getId()) //Check to see if the ID that was given is a match
+		if (!(it->isCompleted()))
 		{
-			if (!task.isCompleted()) //Check if the task is not completed
-			{
-				task.markCompleted();
-			}
-			return true;
+			it->markCompleted();
 		}
+		return true;
 	}
+	
 	return false;
 }
 
 bool TaskManager::deleteTask(int t_id)
 {
-	auto it = m_tasks.begin(); //Points to the first task
-	while(it != m_tasks.end())
+	auto it = findTaskById(t_id);
+	if (it != m_tasks.end())
 	{
-		if (it->getId() == t_id) //Access the ID of the object the iterator "it" is pointing to and compare it.
-		{
-			m_tasks.erase(it);
-			return true;
-		}
-		it++;
+		m_tasks.erase(it);
+		return true;
 	}
+
 	return false;
+}
+
+std::vector<Task>::iterator TaskManager::findTaskById(int t_id)
+{
+	return std::find_if(
+		m_tasks.begin(), 
+		m_tasks.end(), 
+		[t_id](const Task& task) {
+		return task.getId() == t_id;
+	}
+	);
 }
