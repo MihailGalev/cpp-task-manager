@@ -3,18 +3,17 @@
 #include <string>
 #include "taskMenu.h"
 #include "taskMenuVisualization.h"
-bool checkInvalidInput();
-bool isValidMenuOption(int t_option);
+#include "taskManipulation.h"
 
 void taskMenu(TaskManager& manager)
 {
 	while (true) // This while loop will keep the task menu running until the user chooses to exit the program.
 	{
 		taskMenuVisualization(); //The task menu displays the options for the user to choose from.
-
+		int mode{ 0 }; //mode 0 means it's not in change of task details mode
 		int option{};
 		std::cin >> option;
-		if (checkInvalidInput() || !isValidMenuOption(option)) // This line checks the validity of the user input. If the input is invalid, an error message is displayed and the user is prompted to try again.
+		if (checkInvalidInput() || !isValidMenuOption(option, mode)) // This line checks the validity of the user input. If the input is invalid, an error message is displayed and the user is prompted to try again.
 		{
 			std::cout << "The option you've chosen is not valid. Please try again!" << '\n';
 			continue;
@@ -22,88 +21,26 @@ void taskMenu(TaskManager& manager)
 		switch (option)
 		{
 		case 1: //Add a task
-		{
-			int id{};
-			std::cout << "Enter an ID: ";
-			std::cin >> id;
-			if (checkInvalidInput() || id <= 0)
-			{
-				std::cout << "Invalid ID. ID can be only positive integers." << '\n';
-				break;
-			}
-
-			std::string title;
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			std::cout << "Enter a title of the Task: ";
-			std::getline(std::cin, title);
-
-			std::string description;
-			std::cout << "Enter a brief description of the Task: ";
-			std::getline(std::cin, description);
-
-			if (manager.addTask(id, title, description))
-			{
-				std::cout << "Task added successfully!" << '\n';
-			}
-			else
-			{
-				std::cout << "A task with this ID already exists!" << '\n';
-			}
+			addTask(manager);
 			break;
-		}
 		case 2: // View a list of all tasks
 			manager.viewTasks();
 			break;
 		case 3: //Delete a task
-		{
-			int id{};
-			std::cout << "Enter the ID of the task you want to be deleted: ";
-			std::cin >> id;
-			if (checkInvalidInput() || id <= 0)
-			{
-				std::cout << "Invalid ID. ID can be only positive integers." << '\n';
-				break;
-			}
-
-			bool done{ manager.deleteTask(id) };
-			if (done)
-			{
-				std::cout << "The task has been deleted successfully!" << '\n';
-			}
-			else 
-			{
-				std::cout << "Task not found!" << '\n';
-			}
+			deleteTask(manager);
 			break;
-		}
 		case 4: //Mark a task as complete
-		{
-			int id{};
-			std::cout << "Enter the ID of the task you want to be marked as complete: ";
-			std::cin >> id;
-			if (checkInvalidInput() || id <= 0)
-			{
-				std::cout << "Invalid ID. ID can be only positive integers." << '\n';
-				break;
-			}
-
-			bool marked{ manager.markTaskCompleted(id) };
-			if (marked)
-			{
-				std::cout << "The task has been marked as complete successfully!" << '\n';
-			}
-			else
-			{
-				std::cout << "Task not found!" << '\n';
-			}
+			markTaskComplete(manager);
 			break;
-		}
 		case 5: //View task count, completed tasks count and incomplete tasks count
 			std::cout << "Total count of entered tasks: " << manager.getTaskCount() << '\n';
 			std::cout << "Total count of completed tasks: " << manager.getCompletedTaskCount() << '\n';
 			std::cout << "Total count of incomplete tasks: " << manager.getIncompleteTaskCount() << '\n';
 			break;
-		case 6:
+		case 6: // Task detail manipulation
+			changeTaskInfo(manager);
+			break;
+		case 7: //Exit the program
 			std::cout << "You've chosen to exit the program. Goodbye!" << '\n';
 			return;
 		}
@@ -124,7 +61,15 @@ bool checkInvalidInput()
 	}
 }
 
-bool isValidMenuOption(int t_option)
+bool isValidMenuOption(int t_option, int mode)
 {
-	return t_option >= 1 && t_option <= 6;
+	if (mode == 0)
+	{
+		return t_option >= 1 && t_option <= 7;//main menu options limit
+	}
+	else
+	{
+		return t_option >= 1 && t_option <= 3;//task manipulation menu limit
+	}
+	
 }

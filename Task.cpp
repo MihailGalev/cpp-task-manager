@@ -37,3 +37,8 @@ void Task::setTitle(const std::string& t_title)
 {
 	m_title = t_title;
 }
+
+void Task::setDescription(const std::string& t_description)
+{
+	m_description = t_description;
+}

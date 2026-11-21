@@ -19,6 +19,9 @@ public:
 	bool markTaskCompleted(int id);
 	bool deleteTask(int id);
 	bool changeTaskTitle(int t_id, const std::string& t_title);
+	bool taskExists(int t_id);
+	bool isTaskCompleted(int t_id);
+	bool changeTaskDescription(int t_id, const std::string& t_description);
 };
 #endif // !TASK_MANAGER_H
 

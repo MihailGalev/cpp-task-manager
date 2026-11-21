@@ -128,12 +128,14 @@
       <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp20</LanguageStandard>
     </ClCompile>
     <ClCompile Include="Task.cpp" />
+    <ClCompile Include="taskManipulation.cpp" />
     <ClCompile Include="taskManager.cpp" />
     <ClCompile Include="taskMenu.cpp" />
     <ClCompile Include="taskMenuVisualization.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Task.h" />
+    <ClInclude Include="taskManipulation.h" />
     <ClInclude Include="taskManager.h" />
     <ClInclude Include="taskMenu.h" />
     <ClInclude Include="taskMenuVisualization.h" />

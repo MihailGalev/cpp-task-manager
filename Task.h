@@ -18,5 +18,6 @@ public:
 	bool isCompleted() const;
 	void markCompleted();
 	void setTitle(const std::string& t_title);
+	void setDescription(const std::string& t_description);
 };
 #endif

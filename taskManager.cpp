@@ -75,7 +75,7 @@ bool TaskManager::markTaskCompleted(int t_id)
 	auto it = findTaskById(t_id);
 	if (it != m_tasks.end())
 	{
-		if (!(it->isCompleted()))
+		if (!isTaskCompleted(t_id))
 		{
 			it->markCompleted();
 		}
@@ -114,6 +114,37 @@ bool TaskManager::changeTaskTitle(int t_id, const std::string& t_title)
 	if (it != m_tasks.end())
 	{
 		it->setTitle(t_title);
+		return true;
+	}
+
+	return false;
+}
+
+bool TaskManager::taskExists(int t_id)
+{
+	auto it = findTaskById(t_id);
+	if (it != m_tasks.end())
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool TaskManager::isTaskCompleted(int t_id) 
+{
+	auto it = findTaskById(t_id);
+
+	return it->isCompleted();
+
+}
+
+bool TaskManager::changeTaskDescription(int t_id, const std::string& t_description)
+{
+	auto it = findTaskById(t_id);
+	if (it != m_tasks.end())
+	{
+		it->setDescription(t_description);
 		return true;
 	}
 
