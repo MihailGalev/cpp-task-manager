@@ -1,5 +1,5 @@
 #ifndef TASK_MANIPULATION_H
-#define TASKL_MANIPULATION_H
+#define TASK_MANIPULATION_H
 #include "taskManager.h"
 void addTask(TaskManager& manager);
 void deleteTask(TaskManager& manager);

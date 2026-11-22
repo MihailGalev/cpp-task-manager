@@ -54,10 +54,6 @@ void deleteTask(TaskManager& manager)
 		{
 			std::cout << "Invalid ID. ID can be only positive integers." << '\n';
 		}
-		else if (!manager.taskExists(id))
-		{
-			std::cout << "Task not found! Try again!" << '\n';
-		}
 		else
 		{
 			if (manager.deleteTask(id))
@@ -67,7 +63,7 @@ void deleteTask(TaskManager& manager)
 			}
 			else
 			{
-				std::cout << "Task wasn't deleted. Try again!" << '\n';
+				std::cout << "Task ID not found!" << '\n';
 			}
 		}
 	}
@@ -84,25 +80,20 @@ void markTaskComplete(TaskManager& manager)
 		{
 			std::cout << "Invalid ID. ID can be only positive integers." << '\n';
 		}
-		else if (!manager.taskExists(id))
-		{
-			std::cout << "Task not found! Try again!" << '\n';
-		}
-		else if (manager.isTaskCompleted(id))
-		{
-			std::cout << "The task has already been completed!" << '\n';
-			break;
-		}
 		else
 		{
-			if (manager.markTaskCompleted(id))
+			auto result = manager.markTaskCompleted(id);
+			switch (result)
 			{
+			case CompletionResult::Success:
 				std::cout << "The task has been marked as complete successfully!" << '\n';
+				return;
+			case CompletionResult::AlreadyCompleted:
+				std::cout << "The task is already marked as complete!" << '\n';
+				return;
+			case CompletionResult::NotFound:
+				std::cout << "Task ID not found!" << '\n';
 				break;
-			}
-			else
-			{
-				std::cout << "Task wasn't marked as complete. Try again!" << '\n';
 			}
 		}
 	}
@@ -141,11 +132,12 @@ void changeTaskInfo(TaskManager& manager)
 				case 1: //change of the title 
 				{
 					std::cout << "Enter a new title for the task: ";
-					std::string new_title;
-					std::cin >> new_title;
-					if (manager.changeTaskTitle(id, new_title))
+					std::string t_title;
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					std::getline(std::cin, t_title);
+					if (manager.changeTaskTitle(id, t_title))
 					{
-						std::cout << "The task has a new title: " << new_title<< '\n';
+						std::cout << "The task has a new title: " << t_title << '\n';
 					}
 					else
 					{
@@ -156,11 +148,12 @@ void changeTaskInfo(TaskManager& manager)
 				case 2: //change of the description
 				{
 					std::cout << "Enter a new description of the task: ";
-					std::string new_description;
-					std::cin >> new_description;
-					if (manager.changeTaskDescription(id, new_description))
+					std::string t_description;
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					std::getline(std::cin, t_description);
+					if (manager.changeTaskDescription(id, t_description))
 					{
-						std::cout << "The task has a new description: " << new_description << '\n';
+						std::cout << "The task has a new description: " << t_description << '\n';
 					}
 					else
 					{

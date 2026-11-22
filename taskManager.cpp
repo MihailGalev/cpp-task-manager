@@ -70,20 +70,23 @@ void TaskManager::viewTasks() const
 	}
 }
 
-bool TaskManager::markTaskCompleted(int t_id)
+CompletionResult TaskManager::markTaskCompleted(int t_id)
 {
 	auto it = findTaskById(t_id);
 	if (it != m_tasks.end())
 	{
-		if (!isTaskCompleted(t_id))
+		if (!it->isCompleted())
 		{
 			it->markCompleted();
+			return CompletionResult::Success;
 		}
-		return true;
+		return CompletionResult::AlreadyCompleted;
 	}
 	
-	return false;
+	return CompletionResult::NotFound;
 }
+
+
 
 bool TaskManager::deleteTask(int t_id)
 {
@@ -134,9 +137,12 @@ bool TaskManager::taskExists(int t_id)
 bool TaskManager::isTaskCompleted(int t_id) 
 {
 	auto it = findTaskById(t_id);
+	if (it != m_tasks.end())
+	{
+		return it->isCompleted();
+	}
 
-	return it->isCompleted();
-
+	return false;
 }
 
 bool TaskManager::changeTaskDescription(int t_id, const std::string& t_description)

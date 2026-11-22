@@ -1,6 +1,7 @@
 #include <iostream>
 #include <limits>
 #include <string>
+#include <sstream>
 #include "taskMenu.h"
 #include "taskMenuVisualization.h"
 #include "taskManipulation.h"

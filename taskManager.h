@@ -4,6 +4,12 @@
 #include <cstddef>
 #include <string>
 #include "Task.h"
+enum class CompletionResult
+{
+	Success,
+	AlreadyCompleted,
+	NotFound
+};
 class TaskManager
 {
 private:
@@ -16,7 +22,7 @@ public:
 	bool addTask(int id, const std::string& title,
 		const std::string& description);
 	void viewTasks() const;
-	bool markTaskCompleted(int id);
+	CompletionResult markTaskCompleted(int id);
 	bool deleteTask(int id);
 	bool changeTaskTitle(int t_id, const std::string& t_title);
 	bool taskExists(int t_id);

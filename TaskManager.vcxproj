@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="inputUtils.cpp" />
     <ClCompile Include="main.cpp">
       <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp20</LanguageStandard>
     </ClCompile>
@@ -134,6 +135,7 @@
     <ClCompile Include="taskMenuVisualization.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inputUtils.h" />
     <ClInclude Include="Task.h" />
     <ClInclude Include="taskManipulation.h" />
     <ClInclude Include="taskManager.h" />
