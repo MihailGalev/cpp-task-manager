@@ -2,44 +2,116 @@
 #include "taskManager.h"
 #include "taskMenu.h"
 #include "taskMenuVisualization.h"
+#include "inputUtils.h"
 #include <iostream>
+
+namespace
+{
+	void taskDetailManipulation(TaskManager& manager, int id)
+	{
+		int mode{ 1 }; // mode 1 means details of the task will be changed
+		while (true) //task manipulation menu begins
+		{
+			taskDetailManipulationMenuVisualisation();
+			int option{};
+			std::string input;
+			if (!std::getline(std::cin, input))
+			{
+				return;
+			}
+			if (!tryParseInteger(input, option) || !isValidMenuOption(option, mode)) // This line checks the validity of the user input. If the input is invalid, an error message is displayed and the user is prompted to try again.
+			{
+				std::cout << "The option you've chosen is not valid. Please try again!" << '\n';
+				continue;
+			}
+			switch (option)
+			{
+			case 1: //change of the title 
+			{
+				std::cout << "Enter a new title for the task: ";
+				std::string t_title;
+				if (!std::getline(std::cin, t_title))
+				{
+					return;
+				}
+				if (manager.changeTaskTitle(id, t_title))
+				{
+					std::cout << "The task has a new title: " << t_title << '\n';
+				}
+				else
+				{
+					std::cout << "The title was not changed!" << '\n';
+				}
+				break;
+			}
+			case 2: //change of the description
+			{
+				std::cout << "Enter a new description of the task: ";
+				std::string t_description;
+				if (!std::getline(std::cin, t_description))
+				{
+					return;
+				}
+				if (manager.changeTaskDescription(id, t_description))
+				{
+					std::cout << "The task has a new description: " << t_description << '\n';
+				}
+				else
+				{
+					std::cout << "The description was not changed!" << '\n';
+				}
+				break;
+			}
+			case 3: //exit of this menu and go back to the main menu
+				return;
+			}
+		}
+	}
+}
 
 void addTask(TaskManager& manager)
 {
 	while (true)
 	{
 		int id{};
+		std::string input;
 		std::cout << "Enter an ID: ";
-		std::cin >> id;
-		if (checkInvalidInput() || id <= 0)
+		if (!std::getline(std::cin, input))
+		{
+			return;
+		}
+		if (!tryParseInteger(input, id) || id <= 0)
 		{
 			std::cout << "Invalid ID. ID can be only positive integers." << '\n';
+			continue;
 		}
-		else if (manager.taskExists(id))
+		if (manager.taskExists(id))
 		{
 			std::cout << "A task with this ID already exists! Try again!" << '\n';
+			continue;
 		}
-		else
+
+		std::string title;
+		std::cout << "Enter a title of the Task: ";
+		if (!std::getline(std::cin, title))
 		{
-			std::string title;
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			std::cout << "Enter a title of the Task: ";
-			std::getline(std::cin, title);
-
-			std::string description;
-			std::cout << "Enter a brief description of the Task: ";
-			std::getline(std::cin, description);
-
-			if (manager.addTask(id, title, description))
-			{
-				std::cout << "Task added successfully!" << '\n';
-				break;
-			}
-			else
-			{
-				std::cout << "Task wasn't added. Try again!" << '\n';
-			}
+			return;
 		}
+
+		std::string description;
+		std::cout << "Enter a brief description of the Task: ";
+		if (!std::getline(std::cin, description))
+		{
+			return;
+		}
+
+		if (manager.addTask(id, title, description))
+		{
+			std::cout << "Task added successfully!" << '\n';
+			break;
+		}
+
+		std::cout << "Task wasn't added. Try again!" << '\n';
 	}
 }
 
@@ -48,24 +120,24 @@ void deleteTask(TaskManager& manager)
 	while (true)
 	{
 		int id{};
+		std::string input;
 		std::cout << "Enter the ID of the task you want to be deleted: ";
-		std::cin >> id;
-		if (checkInvalidInput() || id <= 0)
+		if (!std::getline(std::cin, input))
+		{
+			return;
+		}
+		if (!tryParseInteger(input, id) || id <= 0)
 		{
 			std::cout << "Invalid ID. ID can be only positive integers." << '\n';
+			continue;
 		}
-		else
+		if (manager.deleteTask(id))
 		{
-			if (manager.deleteTask(id))
-			{
-				std::cout << "The task has been deleted successfully!" << '\n';
-				break;
-			}
-			else
-			{
-				std::cout << "Task ID not found!" << '\n';
-			}
+			std::cout << "The task has been deleted successfully!" << '\n';
+			return;
 		}
+
+		std::cout << "Task ID not found!" << '\n';
 	}
 }
 
@@ -74,27 +146,29 @@ void markTaskComplete(TaskManager& manager)
 	while (true)
 	{
 		int id{};
+		std::string input;
 		std::cout << "Enter the ID of the task you want to be marked as complete: ";
-		std::cin >> id;
-		if (checkInvalidInput() || id <= 0)
+		if (!std::getline(std::cin, input))
+		{
+			return;
+		}
+		if (!tryParseInteger(input, id) || id <= 0)
 		{
 			std::cout << "Invalid ID. ID can be only positive integers." << '\n';
+			continue;
 		}
-		else
+		CompletionResult result = manager.markTaskCompleted(id);
+		switch (result)
 		{
-			auto result = manager.markTaskCompleted(id);
-			switch (result)
-			{
-			case CompletionResult::Success:
-				std::cout << "The task has been marked as complete successfully!" << '\n';
-				return;
-			case CompletionResult::AlreadyCompleted:
-				std::cout << "The task is already marked as complete!" << '\n';
-				return;
-			case CompletionResult::NotFound:
-				std::cout << "Task ID not found!" << '\n';
-				break;
-			}
+		case CompletionResult::Success:
+			std::cout << "The task has been marked as complete successfully!" << '\n';
+			return;
+		case CompletionResult::AlreadyCompleted:
+			std::cout << "The task is already marked as complete!" << '\n';
+			return;
+		case CompletionResult::NotFound:
+			std::cout << "Task ID not found!" << '\n';
+			break;
 		}
 	}
 }
@@ -103,68 +177,26 @@ void changeTaskInfo(TaskManager& manager)
 {
 	while (true)
 	{
-		std::cout << "Enter the ID of the task you'd like to manipulate: ";
 		int id{};
-		std::cin >> id;
-		if (checkInvalidInput() || id <= 0)
+		std::string input;
+		std::cout << "Enter the ID of the task you'd like to manipulate: ";
+		if (!std::getline(std::cin, input))
+		{
+			return;
+		}
+		if (!tryParseInteger(input, id) || id <= 0)
 		{
 			std::cout << "Invalid ID. ID can be only positive integers." << '\n';
+			continue;
 		}
-		else if (!manager.taskExists(id))
+		if (!manager.taskExists(id))
 		{
 			std::cout << "Task not found! Try again!" << '\n';
+			continue;
 		}
-		else
-		{
-			int mode{ 1 }; // mode 1 means details of the task will be changed
-			while (true) //task manipulation menu begins
-			{
-				taskDetailManipulationMenuVisualisation();
-				int option{};
-				std::cin >> option;
-				if (checkInvalidInput() || !isValidMenuOption(option, mode)) // This line checks the validity of the user input. If the input is invalid, an error message is displayed and the user is prompted to try again.
-				{
-					std::cout << "The option you've chosen is not valid. Please try again!" << '\n';
-					continue;
-				}
-				switch (option)
-				{
-				case 1: //change of the title 
-				{
-					std::cout << "Enter a new title for the task: ";
-					std::string t_title;
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-					std::getline(std::cin, t_title);
-					if (manager.changeTaskTitle(id, t_title))
-					{
-						std::cout << "The task has a new title: " << t_title << '\n';
-					}
-					else
-					{
-						std::cout << "The title was not changed!" << '\n';
-					}
-					break;
-				}
-				case 2: //change of the description
-				{
-					std::cout << "Enter a new description of the task: ";
-					std::string t_description;
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-					std::getline(std::cin, t_description);
-					if (manager.changeTaskDescription(id, t_description))
-					{
-						std::cout << "The task has a new description: " << t_description << '\n';
-					}
-					else
-					{
-						std::cout << "The description was not changed!" << '\n';
-					}
-					break;
-				}
-				case 3: //exit of this menu and go back to the main menu
-					return;
-				}
-			}
-		}
+
+		taskDetailManipulation(manager, id);
+		return;
 	}
 }
+

@@ -1,10 +1,9 @@
 #include <iostream>
-#include <limits>
 #include <string>
-#include <sstream>
 #include "taskMenu.h"
 #include "taskMenuVisualization.h"
 #include "taskManipulation.h"
+#include "inputUtils.h"
 
 void taskMenu(TaskManager& manager)
 {
@@ -13,8 +12,12 @@ void taskMenu(TaskManager& manager)
 		taskMenuVisualization(); //The task menu displays the options for the user to choose from.
 		int mode{ 0 }; //mode 0 means it's not in change of task details mode
 		int option{};
-		std::cin >> option;
-		if (checkInvalidInput() || !isValidMenuOption(option, mode)) // This line checks the validity of the user input. If the input is invalid, an error message is displayed and the user is prompted to try again.
+		std::string input;
+		if (!std::getline(std::cin, input))
+		{
+			return;
+		}
+		if (!tryParseInteger(input, option) || !isValidMenuOption(option, mode)) // This line checks the validity of the user input. If the input is invalid, an error message is displayed and the user is prompted to try again.
 		{
 			std::cout << "The option you've chosen is not valid. Please try again!" << '\n';
 			continue;
@@ -45,20 +48,6 @@ void taskMenu(TaskManager& manager)
 			std::cout << "You've chosen to exit the program. Goodbye!" << '\n';
 			return;
 		}
-	}
-}
-
-bool checkInvalidInput()
-{
-	if (std::cin.fail() || std::cin.peek() != '\n')// Checks if the input is invalid or there are extra characters in the input stream. If either condition is true, the input is considered invalid.
-	{
-		std::cin.clear(); // Clear the error flag
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-		return true; // Invalid input
-	}
-	else
-	{
-		return false; // Valid input
 	}
 }
 
