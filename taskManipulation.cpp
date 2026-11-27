@@ -9,7 +9,7 @@ namespace
 {
 	void taskDetailManipulation(TaskManager& manager, int id)
 	{
-		int mode{ 1 }; // mode 1 means details of the task will be changed
+		const MenuType mode = MenuType::ChangeInfoMenu;
 		while (true) //task manipulation menu begins
 		{
 			taskDetailManipulationMenuVisualisation();
@@ -74,13 +74,13 @@ void addTask(TaskManager& manager)
 	while (true)
 	{
 		int id{};
-		std::string input;
 		std::cout << "Enter an ID: ";
-		if (!std::getline(std::cin, input))
+		const InputResult result = tryReadPositiveInteger(id);
+		if (result == InputResult::EndOfInput)
 		{
 			return;
 		}
-		if (!tryParseInteger(input, id) || id <= 0)
+		if (result == InputResult::Invalid)
 		{
 			std::cout << "Invalid ID. ID can be only positive integers." << '\n';
 			continue;
@@ -108,7 +108,7 @@ void addTask(TaskManager& manager)
 		if (manager.addTask(id, title, description))
 		{
 			std::cout << "Task added successfully!" << '\n';
-			break;
+			return;
 		}
 
 		std::cout << "Task wasn't added. Try again!" << '\n';
@@ -120,13 +120,13 @@ void deleteTask(TaskManager& manager)
 	while (true)
 	{
 		int id{};
-		std::string input;
 		std::cout << "Enter the ID of the task you want to be deleted: ";
-		if (!std::getline(std::cin, input))
+		const InputResult result = tryReadPositiveInteger(id);
+		if (result == InputResult::EndOfInput)
 		{
 			return;
 		}
-		if (!tryParseInteger(input, id) || id <= 0)
+		if (result == InputResult::Invalid)
 		{
 			std::cout << "Invalid ID. ID can be only positive integers." << '\n';
 			continue;
@@ -146,19 +146,20 @@ void markTaskComplete(TaskManager& manager)
 	while (true)
 	{
 		int id{};
-		std::string input;
 		std::cout << "Enter the ID of the task you want to be marked as complete: ";
-		if (!std::getline(std::cin, input))
+		const InputResult input_result = tryReadPositiveInteger(id);
+		if (input_result == InputResult::EndOfInput)
 		{
 			return;
 		}
-		if (!tryParseInteger(input, id) || id <= 0)
+		if (input_result == InputResult::Invalid)
 		{
 			std::cout << "Invalid ID. ID can be only positive integers." << '\n';
 			continue;
 		}
-		CompletionResult result = manager.markTaskCompleted(id);
-		switch (result)
+
+		const CompletionResult comp_result = manager.markTaskCompleted(id);
+		switch (comp_result)
 		{
 		case CompletionResult::Success:
 			std::cout << "The task has been marked as complete successfully!" << '\n';
@@ -178,13 +179,13 @@ void changeTaskInfo(TaskManager& manager)
 	while (true)
 	{
 		int id{};
-		std::string input;
 		std::cout << "Enter the ID of the task you'd like to manipulate: ";
-		if (!std::getline(std::cin, input))
+		const InputResult result = tryReadPositiveInteger(id);
+		if (result == InputResult::EndOfInput)
 		{
 			return;
 		}
-		if (!tryParseInteger(input, id) || id <= 0)
+		if (result == InputResult::Invalid)
 		{
 			std::cout << "Invalid ID. ID can be only positive integers." << '\n';
 			continue;

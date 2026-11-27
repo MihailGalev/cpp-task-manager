@@ -10,7 +10,7 @@ void taskMenu(TaskManager& manager)
 	while (true) // This while loop will keep the task menu running until the user chooses to exit the program.
 	{
 		taskMenuVisualization(); //The task menu displays the options for the user to choose from.
-		int mode{ 0 }; //mode 0 means it's not in change of task details mode
+		const MenuType mode = MenuType::MainMenu;
 		int option{};
 		std::string input;
 		if (!std::getline(std::cin, input))
@@ -51,15 +51,13 @@ void taskMenu(TaskManager& manager)
 	}
 }
 
-bool isValidMenuOption(int t_option, int mode)
+bool isValidMenuOption(int t_option, MenuType mode)
 {
-	if (mode == 0)
+	switch (mode)
 	{
-		return t_option >= 1 && t_option <= 7;//main menu options limit
+	case MenuType::MainMenu:
+		return t_option >= 1 && t_option <= 7;
+	case MenuType::ChangeInfoMenu:
+		return t_option >= 1 && t_option <= 3;
 	}
-	else
-	{
-		return t_option >= 1 && t_option <= 3;//task manipulation menu limit
-	}
-	
 }
